@@ -1,3 +1,1 @@
-"# RNN-CNN"  
-"# RNN-CNN"  
-"# RNN-CNN"  
+采用IDS-2017-1数据集的DNN与RNN模型训练对比代码
