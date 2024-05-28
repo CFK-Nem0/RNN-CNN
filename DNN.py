@@ -4,6 +4,8 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import pandas as pd
 import numpy as np
 
@@ -42,7 +44,7 @@ file_paths = [
     "F:\\LLL\\MachineLearningCVE\\Friday-WorkingHours-Morning.pcap_ISCX.csv",
     "F:\\LLL\\MachineLearningCVE\\Monday-WorkingHours.pcap_ISCX.csv",
     "F:\\LLL\\MachineLearningCVE\\Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
-    "F:\\LLL\\MachineLearningCVE\\Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+    "F:\\LLL\\MachineLearningCVE\\Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
     "F:\\LLL\\MachineLearningCVE\\Tuesday-WorkingHours.pcap_ISCX.csv",
     "F:\\LLL\\MachineLearningCVE\\Wednesday-workingHours.pcap_ISCX.csv"
 ]
@@ -163,6 +165,26 @@ def evaluate_model(model, test_loader):
     accuracy = 100 * correct / total
     return accuracy
 
+'=================================随机森林算法=========================================='
+x_train_np = x_train.values.astype(np.float32)
+x_test_np = x_test.values.astype(np.float32)
+
+# 训练和评估随机森林模型
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+
+# 对于分类问题使用训练数据拟合模型
+clf.fit(x_train_np, y_train)
+
+# 对于分类问题对测试集进行预测
+y_pred_rf = clf.predict(x_test_np)
+
+# 评估模型性能
+rf_accuracy = accuracy_score(y_test, y_pred_rf)
+print(f"Random Forest Accuracy: {rf_accuracy:.4f}")
+rf_confusion_matrix = confusion_matrix(y_test, y_pred_rf)
+rf_classification_report = classification_report(y_test, y_pred_rf)
+print("Random Forest Confusion Matrix:\n", rf_confusion_matrix)
+print("Random Forest Classification Report:\n", rf_classification_report)
 
 # 训练和评估DNN模型
 train_model(dnn_model, train_loader, criterion, optimizer_dnn, epochs=5)
